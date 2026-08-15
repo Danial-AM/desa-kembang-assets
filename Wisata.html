@@ -1,0 +1,724 @@
+<style>
+/* Tourism Specific Styles */
+.wisata-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem; 
+}
+
+/* Prevent margin collapse untuk page-header agar seragam */
+.page-header .page-label,
+.page-header .page-title,
+.page-header .page-desc {
+  margin: 0;
+}
+.page-header {
+  margin: 0;
+}
+
+/* Bento Grid Layout — fixed-size variants (assigned by renderer via data-size) */
+.wisata-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    grid-auto-flow: dense;
+}
+
+/* Override theme slider fixed width so grid cells fill the track */
+.wisata-grid .wisata-card {
+    width: auto;
+    max-width: none;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg, 16px);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.wisata-grid .wisata-card:hover {
+    border-color: var(--accent-green);
+    box-shadow: var(--shadow-glow-green);
+    transform: translateY(-4px);
+}
+
+.wisata-grid .wisata-card .card-img-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--bg-tertiary);
+}
+
+.wisata-grid .wisata-card .card-img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.wisata-grid .wisata-card:hover .card-img {
+    transform: scale(1.05);
+}
+
+/* Fixed-size variants — each imposes a stable cell size + image ratio
+   so any incoming image dimension is cropped to fit the tile. */
+.wisata-grid .wisata-card[data-size="wide"] {
+    grid-column: span 2;
+}
+.wisata-grid .wisata-card[data-size="wide"] .card-img-wrap {
+    aspect-ratio: 21 / 9;
+}
+
+.wisata-grid .wisata-card[data-size="tall"] {
+    grid-row: span 2;
+}
+.wisata-grid .wisata-card[data-size="tall"] .card-img-wrap {
+    aspect-ratio: 3 / 4;
+}
+
+.wisata-grid .wisata-card[data-size="hero"] {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+.wisata-grid .wisata-card[data-size="hero"] .card-img-wrap {
+     aspect-ratio: 16 / 10;
+ }
+
+ /* Featured card — hero image + 3 thumbnails + content */
+ .wisata-grid .wisata-featured .card-img-wrap {
+     aspect-ratio: 21 / 9;
+ }
+ .wisata-grid .wisata-featured .featured-thumbs {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 0.5rem;
+     padding: 0.75rem 1rem;
+ }
+ .wisata-grid .wisata-featured .featured-thumbs img {
+     width: 100%;
+     height: 60px;
+     object-fit: cover;
+     border-radius: var(--radius-sm, 8px);
+ }
+ .wisata-grid .wisata-featured .card-content {
+     min-height: auto;
+ }
+
+ @media (min-width: 768px) {
+    .wisata-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .wisata-grid {
+        grid-template-columns: 1fr;
+    }
+    .wisata-grid .wisata-card[data-size="wide"],
+    .wisata-grid .wisata-card[data-size="tall"],
+    .wisata-grid .wisata-card[data-size="hero"] {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+    .wisata-grid .wisata-card .card-img-wrap {
+        aspect-ratio: 16 / 9;
+    }
+    .wisata-grid .wisata-featured .card-img-wrap {
+        aspect-ratio: 16 / 9;
+    }
+    .wisata-grid .wisata-featured .featured-thumbs {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.375rem;
+        padding: 0.5rem;
+    }
+    .wisata-grid .wisata-featured .featured-thumbs img {
+        height: 50px;
+    }
+}
+
+.wisata-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg, 16px);
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.wisata-card:hover {
+    border-color: var(--accent-green);
+    box-shadow: var(--shadow-glow-green);
+    transform: translateY(-4px);
+}
+
+.wisata-card .img-wrapper {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--bg-tertiary);
+}
+
+.wisata-card .img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.wisata-card:hover .img-wrapper img {
+    transform: scale(1.05);
+}
+
+/* Content-aware: small min-height prevents collapse but preserves compact cards */
+.wisata-grid .card-content {
+    min-height: 70px;
+}
+
+.wisata-card-content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-height: 100px;
+    justify-content: space-between;
+}
+
+.wisata-card-title {
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.wisata-card-loc {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+}
+
+.wisata-card-loc svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+/* Fixed line clamp for standard sizes */
+.card-desc {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.wisata-card[data-size="default"] .card-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Skeleton Styles */
+.skeleton-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg, 16px);
+    overflow: hidden;
+}
+.skeleton-card[data-size="hero"] {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+.skeleton-card[data-size="hero"] .skeleton-img {
+    aspect-ratio: 16 / 10;
+}
+.skeleton-img {
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    background: linear-gradient(90deg, var(--bg-tertiary) 25%, #2d333b 50%, var(--bg-tertiary) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+.skeleton-card:first-child .skeleton-img {
+    aspect-ratio: 21 / 9;
+}
+.skeleton-content {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.skeleton-title {
+    height: 1.5rem;
+    width: 70%;
+    border-radius: var(--radius-sm, 8px);
+    background: linear-gradient(90deg, var(--bg-tertiary) 25%, #2d333b 50%, var(--bg-tertiary) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+.skeleton-text {
+    height: 1rem;
+    width: 85%;
+    border-radius: var(--radius-sm, 8px);
+    background: linear-gradient(90deg, var(--bg-tertiary) 25%, #2d333b 50%, var(--bg-tertiary) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+.skeleton-text.short {
+    width: 85%;
+}
+@media (max-width: 767px) {
+    .skeleton-card:first-child {
+        grid-column: span 1;
+    }
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.page-btn {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm, 8px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.page-btn:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--text-muted, #7a828e);
+}
+
+.page-btn.active {
+    background-color: var(--accent-green);
+    border-color: var(--accent-green);
+    color: #ffffff;
+}
+
+/* Modal Overlay */
+#modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+#modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-xl, 24px);
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 36rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-md, 0 4px 20px rgba(0,0,0,0.4));
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    box-sizing: border-box;
+}
+
+#modal-overlay.active .modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: rgba(13, 17, 23, 0.7);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background-color: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+}
+
+.modal-close svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+}
+
+#modal-img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background-color: var(--bg-tertiary);
+    display: block;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+#modal-category {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--accent-green-dim, rgba(16,185,129,0.15));
+    color: var(--accent-green);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#modal-title {
+    color: var(--accent-green);
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.modal-loc {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: var(--text-muted, #7a828e);
+    font-size: 0.9375rem;
+}
+
+.modal-loc svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+#modal-desc {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.modal-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 480px) {
+    .modal-info-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.info-box {
+    background-color: var(--bg-tertiary);
+    padding: 1rem;
+    border-radius: var(--radius-md, 12px);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: var(--text-muted, #7a828e);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+.info-val {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+#modal-price {
+    color: var(--accent-gold);
+    font-weight: 700;
+}
+
+#modal-coords {
+    background-color: var(--bg-tertiary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md, 12px);
+    border: 1px dashed var(--border);
+    font-family: monospace;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.modal-btn-primary, .modal-btn-outline {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md, 12px);
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-btn-primary {
+    background-color: var(--accent-gold);
+    color: #000;
+    border: none;
+}
+.modal-btn-primary:hover {
+    background-color: var(--accent-gold-hover);
+    color: var(--accent-green);
+    box-shadow: 0 4px 12px var(--accent-gold-dim);
+}
+
+.modal-btn-outline {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+.modal-btn-outline:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--text-muted, #7a828e);
+}
+.modal-btn-primary:focus,
+.modal-btn-outline:focus {
+    outline: none;
+    box-shadow: none;
+}
+.modal-btn-primary:focus {
+    background-color: var(--accent-gold);
+    color: #000;
+}
+
+/* Gallery thumbnails */
+.modal-thumbs {
+    display: none;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0 4px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+.modal-thumbs img {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: var(--radius-sm, 8px);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+.modal-thumbs img:hover {
+    border-color: var(--accent-gold);
+    transform: scale(1.05);
+}
+
+/* Top Pick badge — grid cards */
+.wisata-grid .wisata-card .top-pick-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent-gold), #f59e1e);
+    color: #000;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-bottom: 0.5rem;
+    align-self: flex-start;
+}
+
+/* Top Pick badge — modal */
+.top-pick-badge {
+    display: none;
+    background-color: var(--accent-gold-dim, rgba(245, 158, 11, 0.35));
+    color: var(--accent-gold);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 480px) {
+    .modal-thumbs img {
+        width: 60px;
+        height: 45px;
+    }
+    #modal-title {
+        font-size: 1.25rem;
+    }
+    .modal-body {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    #modal-desc {
+        font-size: 0.875rem;
+    }
+}
+</style>
+
+<div class="wisata-container">
+    <div class="page-header">
+        <span class="page-label">Jelajahi</span>
+        <h1 class="page-title">Destinasi Wisata Desa Kembang</h1>
+        <p class="page-desc">Temukan pesona alam, budaya, dan kuliner khas yang menakjubkan di sekitar Desa Kembang</p>
+    </div>
+
+    <div id="wisata-grid" class="wisata-grid">
+        <!-- Skeletons — match the pattern layout to prevent shift -->
+        <div class="skeleton-card card" data-size="hero">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-content">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+        <div class="skeleton-card card" data-size="default">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-content">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+        <div class="skeleton-card card" data-size="default">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-content">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-text"></div>
+                <div class="skeleton-text short"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <!-- Pagination populated by JS -->
+    </div>
+</div>
+
+<!-- Full Overlay Modal -->
+<div id="modal-overlay" onclick="handleOverlayClick(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()" aria-label="Tutup">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+         <img id="modal-img" src="" alt="Wisata Image">
+         <div id="modal-thumbs" class="modal-thumbs"></div>
+         <div class="modal-body">
+             <div id="modal-category">Kategori</div>
+             <span id="modal-top-pick" class="top-pick-badge">⭐ Rekomendasi</span>
+             <h2 id="modal-title">Nama Wisata</h2>
+            <div class="modal-loc">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span id="modal-loc-text">Lokasi Wisata</span>
+            </div>
+            <p id="modal-desc">Deskripsi lengkap mengenai destinasi wisata akan ditampilkan di sini.</p>
+            
+            <div class="modal-info-grid">
+                <div class="info-box">
+                    <span class="info-label">Jam Operasional</span>
+                    <span id="modal-hours" class="info-val">08:00 - 17:00</span>
+                </div>
+                <div class="info-box">
+                    <span class="info-label">Tiket Masuk</span>
+                    <span id="modal-price" class="info-val">Rp 0</span>
+                </div>
+            </div>
+            
+            <div id="modal-coords">0.000000, 0.000000</div>
+            
+            <div class="modal-actions">
+                <a id="modal-map-link" href="#" target="_blank" rel="noopener noreferrer" class="modal-btn-primary">Buka di Google Maps</a>
+                <button type="button" class="modal-btn-outline" onclick="closeModal()">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function handleOverlayClick(event) {
+        if (event.target.id === 'modal-overlay') {
+            closeModal();
+        }
+    }
+    function closeModal() {
+        var overlay = document.getElementById('modal-overlay');
+        if(overlay) {
+            overlay.classList.remove('active');
+        }
+        document.body.style.overflow = '';
+    }
+</script>

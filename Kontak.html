@@ -1,0 +1,394 @@
+<style>
+  /* Base & Variables */
+  .kontak-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    color: var(--text-primary, #e6edf3);
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* Page header inherits theme default (.page-header / .page-label / .page-title / .page-desc) */
+
+  /* Bento Grid Layout */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Card Styles */
+  .bento-card {
+    background: var(--bg-secondary, #161b22);
+    border: 1px solid var(--border, #30363d);
+    border-radius: var(--radius-lg, 16px);
+    overflow: hidden;
+  }
+
+  /* Map Placeholder */
+  .map-card {
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-top: 4px solid var(--accent-green, #10b981);
+    background: linear-gradient(to bottom, var(--bg-tertiary, #21262d), var(--bg-secondary, #161b22));
+    padding: 2rem;
+  }
+  .map-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--accent-green, #10b981);
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 8px var(--accent-green-dim, rgba(16,185,129,0.3)));
+  }
+  .map-title {
+    font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 0.5rem;
+  }
+  .map-desc {
+    color: var(--text-secondary, #8b949e);
+    font-size: 0.875rem;
+  }
+
+  /* Info Grid */
+  .info-card {
+    padding: 1.5rem;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .info-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .info-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md, 12px);
+    background: var(--accent-green-dim, rgba(16,185,129,0.15));
+    color: var(--accent-green, #10b981);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .info-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .info-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .info-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #8b949e);
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+  }
+  .info-value {
+    color: var(--text-primary, #e6edf3);
+    font-weight: 500;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  /* Skeletons */
+  .skeleton {
+    background: linear-gradient(90deg, var(--bg-tertiary, #21262d) 25%, #2d333b 50%, var(--bg-tertiary, #21262d) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+    color: transparent !important;
+    display: inline-block;
+  }
+  .skeleton-text {
+    height: 1.25rem;
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+  .skeleton-text.short {
+    width: 60%;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* WhatsApp Button */
+  .wa-button-wrapper {
+    margin-top: 1.5rem;
+  }
+  .wa-button,
+  .wa-button:link,
+  .wa-button:visited,
+  .wa-button:active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    background: #25D366;
+    color: #ffffff !important;
+    padding: 1rem;
+    border-radius: var(--radius-md, 12px);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+    border: none;
+  }
+  .wa-button:hover {
+    background: #20BA56;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3);
+    color: #ffffff !important;
+  }
+  .wa-button svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Social Media Card */
+  .sosmed-card {
+    padding: 1.5rem;
+  }
+  .sosmed-title {
+    font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 1rem;
+  }
+  .sosmed-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .sosmed-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+ .sosmed-tile,
+  .sosmed-tile:link,
+  .sosmed-tile:visited,
+  .sosmed-tile:active {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: var(--radius-md, 12px);
+    text-decoration: none !important;
+    color: #ffffff !important;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .sosmed-tile:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+    color: #ffffff !important;
+  }
+  .sosmed-tile.fb {
+    background: #2563eb;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  }
+  .sosmed-tile.ig {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    box-shadow: 0 4px 12px rgba(220, 39, 67, 0.2);
+  }
+  .sosmed-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+  }
+  .sosmed-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .sosmed-info {
+    flex: 1;
+  }
+  .sosmed-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.125rem;
+  }
+  .sosmed-username {
+    font-size: 0.875rem;
+    opacity: 0.9;
+  }
+  
+  .map-responsive {
+    width: 100%;
+    height: 450px;
+  }
+
+  @media (max-width: 480px) {
+    .page-title {
+        font-size: 1.5rem !important;
+    }
+    .page-desc {
+        font-size: 0.9rem !important;
+    }
+    .info-card, .sosmed-card, .map-card {
+        padding: 1rem;
+    }
+    .map-responsive {
+        height: 350px;
+    }
+    .info-icon {
+        width: 36px;
+        height: 36px;
+    }
+    .info-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    .sosmed-icon {
+        width: 32px;
+        height: 32px;
+        margin-right: 0.75rem;
+    }
+    .sosmed-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+  }
+</style>
+
+<div class="kontak-container">
+  <div class="page-header">
+    <span class="page-label">Hubungi Kami</span>
+    <h1 class="page-title">Kontak Desa Kembang</h1>
+    <p class="page-desc">Silakan hubungi kami untuk informasi lebih lanjut mengenai layanan desa, pengaduan, atau pertanyaan lainnya.</p>
+  </div>
+
+  <div class="bento-grid">
+    <!-- Map Placeholder -->
+    <div class="bento-card map-card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+      <div class="map-responsive">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1974.452238347332!2d111.11473718246972!3d-8.212361067331294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7960350eb128b7%3A0x8bd0c4285bdb93a8!2sBalai%20Desa%20Kembang%20Pacitan!5e0!3m2!1sen!2sid!4v1786183515069!5m2!1sen!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+    </div>
+
+    <!-- Office Info -->
+    <div class="bento-card info-card">
+      <div class="info-grid">
+        <!-- Alamat -->
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">Alamat</div>
+            <div class="info-value" id="kontak-alamat">
+              <div class="skeleton skeleton-text"></div>
+              <div class="skeleton skeleton-text short"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WhatsApp / HP -->
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">Telepon / WhatsApp</div>
+            <div class="info-value" id="kontak-telepon">
+              <div class="skeleton skeleton-text short"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">Email</div>
+            <div class="info-value" id="kontak-email">
+              <div class="skeleton skeleton-text short"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jam Pelayanan -->
+        <div class="info-item">
+          <div class="info-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="info-content">
+            <div class="info-label">Jam Pelayanan</div>
+            <div class="info-value">
+              <div>Senin - Jumat: <span id="kontak-jam-senjum" class="skeleton skeleton-text" style="width: 80px; display: inline-block; vertical-align: middle; height: 1em; margin:0;"></span></div>
+              <div>Sabtu: <span id="kontak-jam-sabtu" class="skeleton skeleton-text" style="width: 80px; display: inline-block; vertical-align: middle; height: 1em; margin:0;"></span></div>
+              <div style="font-size: 0.85em; color: var(--text-muted, #484f58); margin-top: 2px;">Minggu &amp; Libur Nasional: Tutup</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WA Button -->
+      <div class="wa-button-wrapper">
+        <a href="https://wa.me/" id="wa-btn" class="wa-button" target="_blank" rel="noopener noreferrer">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Chat via WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- Social Media -->
+    <div class="bento-card sosmed-card">
+      <h2 class="sosmed-title">Media Sosial</h2>
+      <div class="sosmed-grid">
+        <a href="#" id="sosmed-fb-link" class="sosmed-tile fb" target="_blank" rel="noopener noreferrer">
+          <div class="sosmed-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </div>
+          <div class="sosmed-info">
+            <div class="sosmed-name">Facebook</div>
+            <div class="sosmed-username" id="sosmed-fb-label">
+              <span class="skeleton skeleton-text short" style="background: rgba(255,255,255,0.2); animation: none; height: 1em; margin:0;"></span>
+            </div>
+          </div>
+        </a>
+        
+        <a href="#" id="sosmed-ig-link" class="sosmed-tile ig" target="_blank" rel="noopener noreferrer">
+          <div class="sosmed-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+          </div>
+          <div class="sosmed-info">
+            <div class="sosmed-name">Instagram</div>
+            <div class="sosmed-username" id="sosmed-ig-label">
+              <span class="skeleton skeleton-text short" style="background: rgba(255,255,255,0.2); animation: none; height: 1em; margin:0;"></span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
